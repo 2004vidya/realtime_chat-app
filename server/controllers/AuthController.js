@@ -20,9 +20,7 @@ export const signup = async (req,res,next)=>{
             maxAge,
             secure:true,
             sameSite:"None"
-        
-        
-        
+
         })
 
         
