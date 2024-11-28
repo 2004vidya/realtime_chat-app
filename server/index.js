@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import mongoose from "mongoose"
+import authRoutes from "./routes/AuthRoutes.js"
 
 
 dotenv.config(); // with this command all the env variables will be within process.env
@@ -19,6 +20,8 @@ app.use(cors({ //cors is a middleware which is used when different servers need 
 
 app.use(cookieParser());//middleware for gettig cookies from frontend
 app.use(express.json());
+
+app.use("/api/auth",authRoutes)
 
 const server = app.listen(port,()=>{
     console.log("server is running ");

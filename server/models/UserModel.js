@@ -1,4 +1,4 @@
-import { Password } from "@mui/icons-material"
+
 import mongoose from "mongoose"
 import {genSalt, hash} from "bcrypt"
 
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         required:false
     },
     image:{
-        type:image,
+        type:String,
         required:false
     },
     color:{
@@ -42,4 +42,4 @@ userSchema.pre("save",async function(next){//not using arrow function as it does
 })
 
 const User= mongoose.model("Users",userSchema);
-module.exports = User;
+export default User ;
