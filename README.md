@@ -1,1 +1,1 @@
-started working on a realtime chat application using MERN
+finished setting up the login and signup route in backend
