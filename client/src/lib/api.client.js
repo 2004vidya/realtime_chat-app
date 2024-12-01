@@ -1,7 +1,7 @@
 import axios from "axios";
-import {HOSt} from "@utils/constants";
+import {HOST} from "@/utils/constants.js";
 
-const apiClient = axios.create({
+ export const apiClient = axios.create({
     baseURL:HOST
 })
 //we will use apiclient inside authcomponents to signup 

@@ -5,27 +5,60 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import {apiClient} from "@/lib/api.client.js"
+import { response } from 'express'
+import { LOGIN_ROUTES, SIGNUP_ROUTES } from '@/utils/constants'
 
 const Auth  = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
-  const validatSignup = ()=>{
-    if(!email.length){
+  const validateLogin =()=>{
+    if(!email.length){ // no email length
       toast.error("Email is required")
       return false ;
+    }
+    if(!password.length){
+      toast.error("password is required");
+      return false;
+    }
+    return true;
+
+  }
+
+  const validateSignup = ()=>{
+    if(!email.length){ // no email length
+      toast.error("Email is required")
+      return false ;
+    }
+    if(!password.length){
+      toast.error("password is required");
+      return false;
+    }
+    if(password !== confirmPassword){
+      toast.error("passsword and confirm password should be same ");
+      return false;
     }
     return true;
   }
 
   const handleLogin = async ()=>{
+    if(validateLogin){
+      const res = await apiClient.post(LOGIN_ROUTES,{email,password},{withCredentials:true})
+    }
+    console.log({res});
+    
 
   }
 
 
   const handleSignup = async ()=>{
-    
+    if(validateSignup()){
+      const res = await apiClient.post(SIGNUP_ROUTES,{email,password}, {withCredentials:true})
+      console.log({res});
+      
+    }
 
   }
   return (
