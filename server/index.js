@@ -6,8 +6,12 @@ import mongoose from "mongoose"
 import authRoutes from "./routes/AuthRoutes.js"
 
 
+
 dotenv.config(); // with this command all the env variables will be within process.env
 
+// if (typeof window === "undefined") {
+//     import express from "express";
+// }// Only import Express on the server-side
 const app =express();
 const port = process.env.PORT || 3001;
 const uri = process.env.MONGO_URI;

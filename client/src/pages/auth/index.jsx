@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import {apiClient} from "@/lib/api.client.js"
-import { response } from 'express'
+
 import { LOGIN_ROUTES, SIGNUP_ROUTES } from '@/utils/constants'
 
 const Auth  = () => {
@@ -44,20 +44,39 @@ const Auth  = () => {
   }
 
   const handleLogin = async ()=>{
-    if(validateLogin){
-      const res = await apiClient.post(LOGIN_ROUTES,{email,password},{withCredentials:true})
+    try{
+      if(validateLogin()){
+        const res  = await apiClient.post(LOGIN_ROUTES,{email,password},{withCredentials:true})
+      }
+      console.log(res);
+    }catch(error){
+      console.error('Error during login:', error);
     }
-    console.log({res});
     
 
   }
 
 
   const handleSignup = async ()=>{
-    if(validateSignup()){
-      const res = await apiClient.post(SIGNUP_ROUTES,{email,password}, {withCredentials:true})
-      console.log({res});
-      
+    if (validateSignup()) {
+      try {
+        const res = await apiClient.post(SIGNUP_ROUTES, { email, password }, { withCredentials: true });
+        console.log('Signup successful', res);
+        // handle the response (e.g., redirect, set user state)
+      } catch (error) {
+        console.error('Error during signup:', error);
+        // Show an error message to the user
+        if (error.response) {
+          // If the server responded with an error
+          console.error('Server error:', error.response.data);
+        } else if (error.request) {
+          // If no response was received
+          console.error('Network error:', error.request);
+        } else {
+          // General error
+          console.error('Error:', error.message);
+        }
+      }
     }
 
   }
