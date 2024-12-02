@@ -1,1 +1,1 @@
-finished setting up the login and signup route in backend
+started working on chat and profile page
