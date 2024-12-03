@@ -1,10 +1,13 @@
-import React, { Children } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./pages/auth";
 import Chat from "./pages/chat";
 import Profile from "./pages/profile";
 import { useAppStore } from "./store";
+import { GET_USER_INFO } from "./utils/constants";
+import { apiClient } from "./lib/api.client";
+
 
 //if profileSeup is not complete then user should be redirected to profile page and cannot go to chat page
 
@@ -24,6 +27,36 @@ const AuthRoute = ({ Children }) => {
 };
 
 const App = () => {
+const {userInfo, setUserInfo} = useAppStore();
+const [loading, setLoading] = useState(true)
+
+useEffect(() => {
+  const getUserData = async ()=>{
+    try {
+      const res= await apiClient.get(GET_USER_INFO, 
+        {withCredentials: true });
+      console.log({res});
+      
+    } catch (error) {
+      console.log({error});
+      
+      
+    }
+
+  }
+  if(!userInfo){
+    getUserData();
+  }
+  else{
+    setLoading(false);
+  }
+}, [userInfo,setUserInfo]);
+
+if(loading){
+  return <div>Loading....</div>
+}
+
+
   return (
     <BrowserRouter>
       <Routes>

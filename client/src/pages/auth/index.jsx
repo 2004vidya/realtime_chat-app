@@ -52,16 +52,20 @@ const Auth  = () => {
       try {
         const res = await apiClient.post(LOGIN_ROUTES, { email, password }, { withCredentials: true });
         console.log('Login successful', res);
-        if(res.data.user.id){
-          setUserInfo(res.data.user)
-          if(res.data.user.profileSetup){
-            navigate("/chat");
-          }
-          else{
-            navigate("/profile");
-          }
-        }
+        const user = res?.data?.user; // Safe check for user existence
 
+      if (user && user.id) {
+        setUserInfo(user);
+
+        // Navigate based on profile setup
+        if (user.profileSetup) {
+          navigate("/chat");
+        } else {
+          navigate("/profile");
+        }
+      } else {
+        console.error("User data is missing or malformed");
+      }
         // handle the response (e.g., redirect, set user state)
       } catch (error) {
         console.error('Error during login:', error);
@@ -89,8 +93,12 @@ const Auth  = () => {
       try {
         const res = await apiClient.post(SIGNUP_ROUTES, { email, password }, { withCredentials: true });
         console.log('Signup successful', res);
-        setUserInfo(res.data.user);
-        navigate("/profile");
+        const user = res?.data?.user;
+        if (user && user.id) {
+          setUserInfo(user);
+          navigate("/profile");
+        }
+        
         // handle the response (e.g., redirect, set user state)
       } catch (error) {
         console.error('Error during signup:', error);
