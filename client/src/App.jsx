@@ -13,17 +13,17 @@ import { apiClient } from "./lib/api.client";
 
 //the state gets lost whenever the browser is refreshed so whenever the component is reloaded we need to fetch the userinfo from the server so we will send the jwt token and we will check if jwt token is valid ,if it is valid we will get the data from it and send it to user and if it is expired or there is no jwt token then it should be redirected to auth page and not work
 
-const PrivateRoute = ({ Children }) => {
+const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
-  return isAuthenticated ? Children : <Navigate to="/auth" />;
+  return isAuthenticated ? children : <Navigate to="/auth" />;
   //we will check userinfo , if it is not undefined it will set isAuthenticated to true and then it will return the children or whatever the page is trying to render
 };
 
-const AuthRoute = ({ Children }) => {
+const AuthRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
-  return isAuthenticated ? <Navigate to="/chat" /> : Children;
+  return isAuthenticated ? <Navigate to="/chat" /> : children;
 };
 
 const App = () => {
@@ -35,12 +35,19 @@ useEffect(() => {
     try {
       const res= await apiClient.get(GET_USER_INFO, 
         {withCredentials: true });
-      console.log({res});
       
+      if(res.status===200 && res.data.id){
+        setUserInfo(res.data);
+      }
+      else{
+        setUserInfo(undefined)
+      }
+      console.log({res});
     } catch (error) {
       console.log({error});
-      
-      
+      setUserInfo(undefined);
+    }finally{
+      setLoading(false);
     }
 
   }
