@@ -7,6 +7,9 @@ import { colors, getColor } from "@/lib/utils";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api.client";
+import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -17,7 +20,38 @@ const Profile = () => {
   const [hovered, setHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
 
-  const saveChanges = async () => {};
+  //inside validate prfile we will do checks of firstname and lastname and if they are missing we will return an error 
+  const validateProfile =()=>{
+    if(!firstName){
+      toast.error("First Name is required");
+      return false;
+    }
+    if(!lastName){
+      toast.error("lastName is required");
+      return false;
+    }
+    return true;
+
+  }
+
+  const saveChanges = async () => {
+    if(validateProfile()){
+      try { //calling the API
+        const res =await apiClient.post(UPDATE_PROFILE_ROUTE,{firstName,lastName,color:setSelectedColor},{withCredentials:true});
+        //make sure to use withcredentials:true or else you wont be sending cookies to backend and you wont get userId and you wont be able to update your data
+        if(res.status===200 && res.data){
+          setUserInfo({...res.data});
+          toast.success("Profile Updated successfully");
+          navigate("/chat")
+        }
+        
+      } catch (error) {
+        console.log(error);
+        
+        
+      }
+    }
+  };
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
