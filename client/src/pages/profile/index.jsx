@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppStore } from "@/store";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
@@ -19,6 +19,17 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
+  const fileInputRef = useRef(null);
+
+  
+  useEffect(() => {
+    if(userInfo.profileSetup){
+      setFirstName(userInfo.firstName);
+      setLastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+  }, [userInfo])
+  
 
   //inside validate prfile we will do checks of firstname and lastname and if they are missing we will return an error 
   const validateProfile =()=>{
@@ -33,7 +44,6 @@ const Profile = () => {
     return true;
 
   }
-
   const saveChanges = async () => {
     if(validateProfile()){
       try { //calling the API
@@ -53,10 +63,32 @@ const Profile = () => {
     }
   };
 
+  const handleNavigate =()=>{
+    if(userInfo.profileSetup){
+      navigate("/chat");
+    }
+    else{
+      toast.error("Please Setup Profile")
+    }
+  }
+
+  const handleFileInputClick = ()=>{
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = async (event)=>{
+    const file = event.target.files[0];
+    console.log({file});
+    
+
+  }
+
+  const handleDeleteImage = async()=>{}
+
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max ">
-        <div>
+        <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white text-opacity-90 " />
         </div>
         <div className="grid grid-cols-2">
@@ -92,7 +124,7 @@ const Profile = () => {
               )}
             </Avatar>
             {hovered && (
-              <div className="absolute flex items-center justify-center rounded-full inset-0 bg-black/50 ring-fuchsia-50 cursor-pointer">
+              <div className="absolute flex items-center justify-center rounded-full inset-0 bg-black/50 ring-fuchsia-50 cursor-pointer" onClick={image? handleDeleteImage:handleFileInputClick}>
                 {image ? (
                   <FaTrash className="text-white text-3xl cursor-pointer" />
                 ) : (
@@ -100,7 +132,7 @@ const Profile = () => {
                 )}
               </div>
             )}
-            {/* <input type="text" /> */}
+            <input type="file" ref={fileInputRef} className="hidden" onChange={handleImageChange} name="profile-image" accept=".png, .jpg, .jpeg, .svg,   .webp" />
           </div>
           <div className="flex min-w-32 md:min-2-64 flex-col gap-5 text-white items-center justify-center">
             <div className="w-full ">
