@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api.client";
-import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
+import { ADD_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -79,6 +79,16 @@ const Profile = () => {
   const handleImageChange = async (event)=>{
     const file = event.target.files[0];
     console.log({file});
+    if(file){
+      const formData = new FormData();
+      formData.append("profile-image",file);
+      const res = await apiClient.post(ADD_PROFILE_IMAGE_ROUTE,formData,{withCredentials:true});
+      if (res.status===200 && res.data.image){
+        setUserInfo({...userInfo,image:res.data.image});
+        toast.success("Image updated successfully");
+      }
+      
+    }
     
 
   }
