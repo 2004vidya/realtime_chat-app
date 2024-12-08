@@ -5,14 +5,17 @@ export const  verifyToken =(req,res,next)=>{
     const token = req.cookies.jwt;
     console.log(token);
     if(!token){
-        return res.status(401).send("Your are not authenticated")
+        console.warn("No JWT token found in cookies");
+        return res.status(401).send("You are not authenticated")
     }
-    jwt.verify(token,process.env.JWT_KEY,async(err,payload)=>{
+    jwt.verify(token,process.env.JWT_KEY,(err,payload)=>{
         if(err){
+            console.error("JWT verification failed:", err.message);
             return res.status(403).send("Token is not valid ")
         }
         req.userId = payload.userId;
+        console.log("JWT verified successfully. User ID:", payload.userId);
         next();
-    })
+    });
     
 };
