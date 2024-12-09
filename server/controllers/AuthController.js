@@ -34,9 +34,11 @@ export const signup = async (req, res, next) => {
             httpOnly: true, // Secure flag (set to true for production)
             maxAge,
             secure: process.env.NODE_ENV === 'production', // Secure cookie in production
-            sameSite: "None", // Needed for cross-origin cookies
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust for development,
+            path: "/", // Ensures the cookie is sent with all requests
         });
-
+    
+       
         // Send response
         return res.status(201).json({
             user: {
@@ -77,7 +79,8 @@ export const login = async (req, res, next) => {
             httpOnly: true, // Secure flag (set to true for production)
             maxAge,
             secure: process.env.NODE_ENV === 'production', // Secure cookie in production
-            sameSite: "None", // Needed for cross-origin cookies
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust for development,
+            path: "/", // Ensures the cookie is sent with all requests
         });
 
         // Send response
