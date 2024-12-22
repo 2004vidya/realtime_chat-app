@@ -14,10 +14,10 @@ export const colors =[
 ];
 
 export const getColor = (color)=>{
-  if(color>=0 && color<colors.length){
+  if(typeof color === 'number' && color>=0 && color<colors.length){
     return colors[color];
   }
-  return color[0];//fallback to the first color if out of range
+  return colors && colors[0] || 'purple';;//fallback to the first color if out of range
 };
 
 export const animationDefaultOptions ={
