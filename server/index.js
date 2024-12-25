@@ -4,6 +4,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import mongoose from "mongoose"
 import authRoutes from "./routes/AuthRoutes.js"
+import ContactsRoutes from "./routes/ContactsRoutes.js"
 
 
 
@@ -29,6 +30,7 @@ app.use(cookieParser());//middleware for gettig cookies from frontend
 app.use(express.json());
 
 app.use("/api/auth",authRoutes)
+app.use("/api/contacts",ContactsRoutes)
 
 const server = app.listen(port,()=>{
     console.log("server is running ");
