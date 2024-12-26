@@ -20,8 +20,10 @@ import { HOST, SEARCH_CONTACTS_ROUTES } from "@/utils/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { apiClient } from "@/lib/api.client";
+import { useAppStore } from "@/store";
 
 const NewDM = () => {
+  const { setSelectedChatType,setSelectedChatData} = useAppStore();
   const [openNewContactModel, setOpenNewContactModel] = useState(false);
 
   const [searchedContacts, setSearchedContacts] = useState([]);
@@ -47,6 +49,8 @@ const NewDM = () => {
 
   const selectNewContact = (contact)=>{
     setOpenNewContactModel(false);
+    setSelectedChatType("contact");
+    setSelectedChatData(contact);
     setSearchedContacts([]);
 
   }
@@ -81,7 +85,9 @@ const NewDM = () => {
               onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
-          <ScrollArea className="h-[250px]">
+          {
+            searchedContacts.length>0 && (
+              <ScrollArea className="h-[250px]">
             <div className="flex flex-col gap-5 ">
               {searchedContacts.map((contact) => (
                 <div
@@ -91,7 +97,7 @@ const NewDM = () => {
                 >
                   <div className="w-12 h-12 relative ">
                     <Avatar className="h-12 w-12 rounded-full overflow-hidden">
-                      {userInfo.image ? (
+                      {contact.image ? (
                         <AvatarImage
                           src={`${HOST}/${contact.image}`}
                           alt="profile"
@@ -127,8 +133,12 @@ const NewDM = () => {
               ))}
             </div>
           </ScrollArea>
+
+            )
+          }
+          
           {searchContacts.length <= 0 && (
-            <div className="flex-1 md:bg-[#1c1d25] mt-5 md:flex flex-col justify-center items-center duration-1000 transition-all">
+            <div className="flex-1  mt-5 md:flex flex-col justify-center items-center duration-1000 transition-all">
               <Lottie
                 isClickToPauseDisabled={true}
                 height={100}
