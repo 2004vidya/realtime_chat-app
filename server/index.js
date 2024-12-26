@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import mongoose from "mongoose"
 import authRoutes from "./routes/AuthRoutes.js"
 import ContactsRoutes from "./routes/ContactsRoutes.js"
+import setupSocket from "./socket.js"
 
 
 
@@ -36,6 +37,8 @@ const server = app.listen(port,()=>{
     console.log("server is running ");
     
 })
+
+setupSocket(server);
 
 mongoose.connect(uri).then(()=>{
     console.log("DB connection successfull");
