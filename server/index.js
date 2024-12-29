@@ -27,6 +27,7 @@ app.use(cors({ //cors is a middleware which is used when different servers need 
 
 //we are telling express that whenever a user comes to this route and calls an image then we need to serve the asset from our directory to request
 app.use("/uploads/profiles",express.static("uploads/profiles"));
+app.use("/uploads/files",express.static("uploads/files"));
 
 app.use(cookieParser());//middleware for gettig cookies from frontend
 app.use(express.json());
