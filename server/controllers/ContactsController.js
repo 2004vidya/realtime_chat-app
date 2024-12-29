@@ -8,8 +8,8 @@ export const SearchContacts = async (req, res) => {
         const { searchTerm } = req.body;
 
         // Validate input
-        if (!searchTerm || typeof searchTerm !== "string" || searchTerm.trim().length < 2) {
-            return res.status(400).send("Invalid searchTerm. It must be at least 2 characters.");
+        if (!searchTerm || typeof searchTerm !== "string" ) {
+            return res.status(400).send("Invalid searchTerm. ");
         }
 
         // Sanitize search term
@@ -22,7 +22,7 @@ export const SearchContacts = async (req, res) => {
                 { _id: { $ne: req.userId } }, // Exclude current user
                 {
                     $or: [
-                        { firstName: regex },
+                        { firstName: regex },//regex is the sanitized searchTerm
                         { lastName: regex },
                         { email: regex },
                     ],
@@ -68,7 +68,7 @@ export const getContactsForDMList = async (req, res) => {
             {
                 $lookup:{
                 from:"users",
-                localfield:"_id",
+                localField:"_id",
                 foreignField:"_id",
                 as:"contactInfo",
                   },

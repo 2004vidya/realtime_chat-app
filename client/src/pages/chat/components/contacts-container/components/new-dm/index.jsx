@@ -103,12 +103,12 @@ const NewDM = () => {
   //   }
   // };
 
-  // const selectNewContact = (contact) => {
-  //   setOpenNewContactModel(false);
-  //   setSelectedChatType("contact");
-  //   setSelectedChatData(contact);
-  //   setSearchedContacts([]);
-  // };
+  const selectNewContact = (contact) => {
+    setOpenNewContactModel(false);
+    setSelectedChatType("contact");
+    setSelectedChatData(contact);
+    setSearchedContacts([]);
+  };
 
   return (
     <>

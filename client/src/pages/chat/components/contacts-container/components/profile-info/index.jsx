@@ -22,7 +22,7 @@ const ProfileInfo = () => {
 
         }
     } catch (error) {
-        console.log(error);
+      console.error("Error during logout:", error.response?.data || error.message);
         
         
     }

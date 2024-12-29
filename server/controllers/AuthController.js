@@ -206,7 +206,7 @@ export const removeProfileImage = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try {
-        res.cookie("jwt","",{maxage:1,secure:true,sameSite:none})
+        res.cookie("jwt","",{maxAge:1,secure:true ,httpOnly:true,sameSite:"none"})
         
                 // Send response
         return res.status(200).send("Logout Successfull")

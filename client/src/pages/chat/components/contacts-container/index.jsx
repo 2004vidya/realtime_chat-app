@@ -10,19 +10,40 @@ const ContactsContainer = () => {
   const {setDirectMessagesContacts,directMessagesContacts} = useAppStore();
 
   useEffect(() => {
-    const getContacts = async ()=>{
-      const res = await apiClient.get(GET_DM_CONTACTS_ROUTES,{withCredentials:true});
-      if(res.data.contacts){
-        // console.log(res.data.contacts);
-        setDirectMessagesContacts(res.data.contacts);
-        
+    const getContacts = async () => {
+      try {
+        const res = await apiClient.get(GET_DM_CONTACTS_ROUTES, { withCredentials: true });
+        if (res.status === 200 && res.data.contacts) {
+          setDirectMessagesContacts(res.data.contacts);
+        } else {
+          console.warn("No contacts found or invalid response structure");
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching contacts:",
+          error.response ? error.response.data : error.message
+        );
       }
+    };
+  
+    getContacts();
+  }, []);
+  
+
+  // useEffect(() => {
+  //   const getContacts = async ()=>{
+  //     const res = await apiClient.get(GET_DM_CONTACTS_ROUTES,{withCredentials:true});
+  //     if(res.data.contacts){
+  //       // console.log(res.data.contacts);
+  //       setDirectMessagesContacts(res.data.contacts);
+        
+  //     }
 
       
-    }
+  //   }
 
-    getContacts()
-  }, [])
+  //   getContacts()
+  // }, [])
     
   return (
     <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full ">

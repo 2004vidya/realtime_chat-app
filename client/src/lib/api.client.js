@@ -6,5 +6,7 @@ import {HOST} from "@/utils/constants.js";
     headers: {
         'Content-Type': 'application/json',
       },
+     withCredentials:true,
+      
 })
 //we will use apiclient inside authcomponents to signup 
